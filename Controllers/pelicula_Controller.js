@@ -1,7 +1,11 @@
-exports.getPeliculas=(req,res)=>{
+const Pelicula=require('../Models/pelicula_model');
+
+exports.getPeliculas= async (req,res)=>{
     try {
+        const pelicula=await Pelicula.find();
         return res.status(200).json({
-            message:"Consulta de todas las peliculas con exito"
+            message:"Consulta de todas las peliculas con exito",
+            data:pelicula
         })
     } catch (error) {
         return res.status(500).json({
@@ -11,11 +15,13 @@ exports.getPeliculas=(req,res)=>{
     }
 }
 
-exports.getByIdPelicula=(req,res)=>{
+exports.getByIdPelicula= async (req,res)=>{
+    const peliculaId=req.params.peliculaId;
     try {
-        const peliculaId=req.params.peliculaId
+        const pelicula=await Pelicula.findById(peliculaId)
         return res.status(200).json({
-            message:"Exito al consultar pelicula con id:"+peliculaId
+            message:"Exito al consultar pelicula con id:"+peliculaId,
+            data:pelicula
         })
     } catch (error) {
         return res.status(500).json({
@@ -25,9 +31,11 @@ exports.getByIdPelicula=(req,res)=>{
     }
 }
 
-exports.newPelicula=(req,res)=>{
+exports.newPelicula= async (req,res)=>{
     try {
-        const newPelicula=req.body
+        const{id,nombre,director,año,duracion,genero}=req.body
+        const newPelicula=new Pelicula({id,nombre,director,año,duracion,genero})
+        await newPelicula.save()
         return res.status(200).json({
             message:"Exito por crear pelicula",
             data:newPelicula
@@ -40,13 +48,14 @@ exports.newPelicula=(req,res)=>{
     }
 }
 
-exports.updatePelicula=(req,res)=>{
+exports.updatePelicula= async (req,res)=>{
+    const peliculaId=req.params.peliculaId
+    const newData=req.body
     try {
-        const peliculaId=req.params.peliculaId
-        const newPelicula=req.body
+        const updatePelicula=await Pelicula.findByIdAndUpdate(peliculaId,newData,{new:true})
         return res.status(200).json({
             message:"Exito pelicula actualizada con el id:"+peliculaId,
-            data:this.updatePelicula
+            data:updatePelicula
         })
     } catch (error) {
         return res.status(500).json({
@@ -57,9 +66,10 @@ exports.updatePelicula=(req,res)=>{
     }
 }
 
-exports.deletePelicula=(req,res)=>{
+exports.deletePelicula= async (req,res)=>{
+    const peliculaId=req.params.peliculaId
     try {
-        const peliculaId=req.params.peliculaId
+        await Pelicula.findByIdAndDelete(peliculaId)
         return res.status(200).json({
             message:"Exito pelicula eliminada con id:"+peliculaId
         })

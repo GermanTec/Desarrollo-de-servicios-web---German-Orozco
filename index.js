@@ -1,6 +1,8 @@
 const express=require('express')
 const morgan=require('morgan')
 
+require('./utils/mongoConnection')
+
 const peliculaRouter=require('./Routers/pelicula_Router')
 
 const app=express()
