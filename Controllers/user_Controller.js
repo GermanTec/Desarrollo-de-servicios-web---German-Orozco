@@ -48,12 +48,12 @@ exports.loginUser=async (req,res) =>{
 
         await User.findOne({email}).then(async user=>{
             if (!user) {
-                return res.status(401).json({message: 'Credenciales invalidas'});
+                return res.status(401).json({error: 'Credenciales invalidas'});
             }
 
             const passwordMatch=await bcrypt.compare(password,user.password);
             if (!passwordMatch) {
-                return res.status(401).json({message:'Credeciales invalidas'});
+                return res.status(401).json({error:'Credeciales invalidas'});
             }
             const token=jwt.sign({userId:user._id, userName:user.userName},
                 'secreto',{expiresIn:'8h'});
@@ -69,7 +69,7 @@ exports.loginUser=async (req,res) =>{
                     token:token,
                     action:'login'
                 });
-        }).catch(error=>{
+        }).catch(err=>{
             return res.status(500).json({
                 action: 'login',
                 error: error
