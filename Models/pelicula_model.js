@@ -10,3 +10,14 @@ let peliculaSchema=new mongose.Schema({
 });
 
 module.exports=mongose.model('Pelicula',peliculaSchema,'pelicula');
+
+/*
+{
+    "id":"1",
+    "nombre": "La venganza",
+    "director": "",
+    "año":2023,
+    "duracion":2,
+    "genero":"Terror"
+}
+*/

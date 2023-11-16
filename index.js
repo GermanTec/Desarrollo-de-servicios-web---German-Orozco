@@ -4,6 +4,7 @@ const morgan=require('morgan')
 require('./utils/mongoConnection')
 
 const peliculaRouter=require('./Routers/pelicula_Router')
+const userRouter=require('./Routers/user_Router')
 
 const app=express()
 const port=3003
@@ -16,6 +17,8 @@ app.use('/peliculas',peliculaRouter)
 app.get('/',(req,res)=>{
     res.send("Bienvenidoo a Peliculas API")
 })
+
+app.use('/users',userRouter)
 
 app.listen(port,()=>{
     console.log("Servidor iniciado en http://localhost:"+port)
